@@ -12,6 +12,7 @@ app.use(cors());
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
+const HOST = '0.0.0.0';
 
 
 //Connect  to MongoDB
@@ -25,7 +26,6 @@ app.get("/", (req, res) => {
 // API Routes
  app.use("/api/users", userRoutes);
  
-app.listen(PORT, () => {
-    console.log(`server is running on http://localhost:${PORT}`);
-    
+app.listen(PORT, HOST, () => {
+    console.log(`server is running on http://${HOST}:${PORT}`);
 });
