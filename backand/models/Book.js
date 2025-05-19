@@ -1,9 +1,27 @@
-import React from 'react'
+const mongoose = require('mongoose');
 
-function Book() {
-  return (
-    <div>Book</div>
-  )
-}
+const bookingSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Assuming your user model name is 'User'
+    required: true
+  },
 
-export default Book
+  wash_fold: { type: Boolean, default: false },
+  wash_iron: { type: Boolean, default: false },
+  dry_clean: { type: Boolean, default: false },
+  iron_only: { type: Boolean, default: false },
+
+  clothes: { type: String, required: true },
+  address: { type: String, required: true },
+  instructions: { type: String },
+
+  pickupDate: { type: Date, required: true },
+  pickupTime: { type: String, required: true },
+
+  deliveryDate: { type: Date, required: true },
+  deliveryTime: { type: String, required: true }
+
+}, { timestamps: true });
+
+module.exports = mongoose.model('Booking', bookingSchema);

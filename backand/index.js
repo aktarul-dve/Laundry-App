@@ -3,6 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
+const bookingRoutes = require("./routes/BookingRoutes");
 
 
 const app = express();
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 
 // API Routes
  app.use("/api/users", userRoutes);
+ app.use("/api/book",  bookingRoutes);
  
 app.listen(PORT, HOST, () => {
     console.log(`server is running on http://${HOST}:${PORT}`);
