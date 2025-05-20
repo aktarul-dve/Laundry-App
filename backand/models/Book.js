@@ -20,7 +20,12 @@ const bookingSchema = new mongoose.Schema({
   pickupTime: { type: String, required: true },
 
   deliveryDate: { type: Date, required: true },
-  deliveryTime: { type: String, required: true }
+  deliveryTime: { type: String, required: true },
+  deliveryTime: { type: String, required: true },
+  status: {
+        type: String,
+        default: "Processing",
+     },
 
 }, { timestamps: true });
 
