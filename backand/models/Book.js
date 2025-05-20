@@ -22,6 +22,7 @@ const bookingSchema = new mongoose.Schema({
   deliveryDate: { type: Date, required: true },
   deliveryTime: { type: String, required: true },
   deliveryTime: { type: String, required: true },
+  phone: { type: String, required: true},
   status: {
         type: String,
         default: "Processing",
