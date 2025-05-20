@@ -51,11 +51,12 @@ router.post("/booking", async (req, res) => {
 
     // বুকিং সেভ করে এবং ইউজার ডেটা populate করে
     const savedBooking = await booking.save();
-    await savedBooking.populate("user", "name email");
+    // 🔁 এখানে পরিবর্তন
+    const populatedBooking = await savedBooking.populate("user", "name email");
 
     res.status(201).json({
       message: "Booking created successfully",
-      booking: savedBooking,
+      booking: populatedBooking,
     });
   } catch (error) {
     console.error("Booking error:", error);
