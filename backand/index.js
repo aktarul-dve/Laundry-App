@@ -8,7 +8,21 @@ const bookingRoutes = require("./routes/BookingRoutes");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://college-app-one.vercel.app',
+      'http://localhost:5173'
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
 
 dotenv.config();
 
@@ -31,5 +45,5 @@ app.get("/", (req, res) => {
  //http://${HOST}:${PORT}
  
 app.listen(PORT, HOST, () => {
-    console.log(`server is running on http://${HOST}:${PORT}`);
+    console.log(`server is running on http://http://localhost:${PORT}`);
 });

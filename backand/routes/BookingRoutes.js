@@ -4,10 +4,10 @@ const Book = require("../models/Book");
 
 const router = express.Router();
 
+// ✅ নতুন বুকিং তৈরি
 router.post("/booking", async (req, res) => {
   const authHeader = req.headers.authorization;
 
-  // টোকেন চেক
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Unauthorized. Token missing." });
   }
@@ -15,7 +15,6 @@ router.post("/booking", async (req, res) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    // টোকেন verify এবং userId বের করা
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.user.id;
 
@@ -34,7 +33,6 @@ router.post("/booking", async (req, res) => {
       deliveryTime,
     } = req.body;
 
-    // নতুন বুকিং তৈরি
     const booking = new Book({
       wash_fold,
       wash_iron,
@@ -51,9 +49,7 @@ router.post("/booking", async (req, res) => {
       user: userId,
     });
 
-    // বুকিং সেভ করে এবং ইউজার ডেটা populate করে
     const savedBooking = await booking.save();
-    // 🔁 এখানে পরিবর্তন
     const populatedBooking = await savedBooking.populate("user", "name email");
 
     res.status(201).json({
@@ -66,7 +62,7 @@ router.post("/booking", async (req, res) => {
   }
 });
 
-// ✅ নতুন GET রুট: নিজের বুকিং দেখতে
+// ✅ নিজের বুকিংগুলো দেখার রাউট
 router.get("/my-bookings", async (req, res) => {
   const authHeader = req.headers.authorization;
 
@@ -92,8 +88,42 @@ router.get("/my-bookings", async (req, res) => {
   }
 });
 
+// ✅ গেট সকল বুকিং
+router.get("/Allbookings", async (req, res) => {
+  try {
+    const allBooking = await Book.find()
+                                 .populate("user", "name email");
+    res.status(200).json(allBooking);
+  } catch (error) {
+    console.error("Fetch bookings error:", error);
+    res.status(500).json({ message: "All bookings fetch failed" });
+  }
+});
 
+// ✅ নতুন রাউট: স্ট্যাটাস আপডেট
+router.put("/updateStatus/:id", async (req, res) => {
+  const bookingId = req.params.id;
+  const { status } = req.body;
 
+  try {
+    const updatedBooking = await Book.findByIdAndUpdate(
+      bookingId,
+      { status },
+      { new: true }
+    ).populate("user", "name email");
 
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({
+      message: "Status updated successfully",
+      booking: updatedBooking,
+    });
+  } catch (error) {
+    console.error("Status update error:", error);
+    res.status(500).json({ message: "Status update failed" });
+  }
+});
 
 module.exports = router;

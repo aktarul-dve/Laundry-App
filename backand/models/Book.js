@@ -24,9 +24,11 @@ const bookingSchema = new mongoose.Schema({
   deliveryTime: { type: String, required: true },
   phone: { type: String, required: true},
   status: {
-        type: String,
-        default: "Processing",
-     },
+  type: String,
+  enum: ['processing', 'pickup', 'out_for_delivery', 'delivered'],
+  default: 'processing'
+}
+
 
 }, { timestamps: true });
 
